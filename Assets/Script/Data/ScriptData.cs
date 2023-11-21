@@ -23,6 +23,8 @@ public class ScriptData
     /// </summary>
     public List<ActionData> actionList = new List<ActionData>();
 
+    public ActionData mainAction = new ActionData();
+
     public static ScriptData CreateNew()
     {
         ScriptData scriptData = new ScriptData();

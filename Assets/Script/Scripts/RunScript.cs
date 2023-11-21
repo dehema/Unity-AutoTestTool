@@ -5,8 +5,6 @@ using UnityEngine;
 using System.Runtime.InteropServices;
 using System;
 using System.IO;
-using System.Drawing;
-using static SettingField;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -52,10 +50,11 @@ public class RunScript : MonoBehaviour
     public int actionIndex = 0;
     IEnumerator ScriptCoroutine()
     {
-        yield return new WaitForEndOfFrame();
         loopCount = 0;
         bool forceExit = false;
+        bool isExpressionRight = false;
         Log("脚本开始运行");
+        yield return new WaitForSeconds(1);
         while (loopCount < currScriptData.loopCount)
         {
             Log("开始第{0}次运行", loopCount + 1);
@@ -64,8 +63,9 @@ public class RunScript : MonoBehaviour
             {
                 Log("开始{0}个动作", actionIndex + 1);
                 ActionData currActionData = currScriptData.actionList[actionIndex];
-                while (currActionData.isLoop)
+                do
                 {
+                    isExpressionRight = false;
                     switch (currActionData.actionType)
                     {
                         case ActionType.Wait:
@@ -99,7 +99,6 @@ public class RunScript : MonoBehaviour
                                 string path = CaptureScreen();
                                 List<string> words = ActionIdentifyText.Ins.IdentifyImage(path);
                                 ActionIdentifyData data = JsonConvert.DeserializeObject<ActionIdentifyData>(currActionData.val);
-                                bool isRight = false;
                                 if (data.expressCondition == ExpressCondition.contain)
                                 {
                                     Log("开始判断是否包含{0}", data.text);
@@ -107,7 +106,7 @@ public class RunScript : MonoBehaviour
                                     {
                                         if (word.Contains(data.text))
                                         {
-                                            isRight = true;
+                                            isExpressionRight = true;
                                             break;
                                         }
                                     }
@@ -115,17 +114,17 @@ public class RunScript : MonoBehaviour
                                 else if (data.expressCondition == ExpressCondition.exclusive)
                                 {
                                     Log("开始判断是否不包含{0}", data.text);
-                                    isRight = true;
+                                    isExpressionRight = true;
                                     foreach (var word in words)
                                     {
                                         if (word.Contains(data.text))
                                         {
-                                            isRight = false;
+                                            isExpressionRight = false;
                                             break;
                                         }
                                     }
                                 }
-                                if (isRight)
+                                if (isExpressionRight)
                                 {
                                     Log("符合条件");
                                     if (data.expressType == ExpressType.Exit)
@@ -152,62 +151,66 @@ public class RunScript : MonoBehaviour
                                 break;
                             }
                     }
-                    if (forceExit)
+                    if (actionIndex < currScriptData.actionList.Count && currActionData.isLoop && !forceExit && !isExpressionRight)
                     {
-                        break;
-                    }
-                    if (currActionData.isLoop)
-                    {
+                        //动作的等待时间
                         yield return new WaitForSeconds(currActionData.interval);
                     }
-                }
-                actionIndex++;
+                } while (currActionData.isLoop && !forceExit && !isExpressionRight);
+                //完成动作
                 if (forceExit)
                 {
                     Log("强制跳出本次循环");
                     break;
                 }
+                if (isExpressionRight)
+                {
+                    //表达式成立 跳到指定动作
+                    continue;
+                }
+                actionIndex++;
+                if (actionIndex < currScriptData.actionList.Count)
+                {
+                    yield return new WaitForSeconds(currScriptData.loopInterval);
+                }
             }
-            if (actionIndex < currScriptData.actionList.Count)
-            {
-                yield return new WaitForSeconds(currScriptData.loopInterval);
-            }
-            Log("结束第{0}次运行", loopCount + 1);
+            //完成一次循环
             loopCount++;
-        }
-        Log("脚本运行结束");
-        Log("");
-        OnComplete();
+            Log("结束第{0}次运行", loopCount + 1);
+            Log("脚本运行结束");
+            Log("");
+            OnComplete();
 #if UNITY_EDITOR
-        AssetDatabase.Refresh();
+            AssetDatabase.Refresh();
 #endif
-    }
-
-    void Log(string str, params object[] args)
-    {
-        string content = string.Format(str, args);
-        RefreshTips(content);
-        content = DateTime.Now.ToString("[hh:mm:ss]") + content + "\r\n";
-        File.AppendAllText(logFilePath, content);
-        Debug.Log(content);
-    }
-
-    /// <summary>
-    /// 捕获屏幕
-    /// </summary>
-    string CaptureScreen()
-    {
-        string path = imgDirPath + "/" + DateTime.Now.ToString("hhmmss") + ".png";
-        try
-        {
-            Log("保存截图至{0}", path);
-            ScreenCapturnFramework.ScreenCapture.PrintScreen(path);
         }
-        catch (Exception e)
+
+        void Log(string str, params object[] args)
         {
-            Log("截图失败:{0}", e.ToString());
-            throw;
+            string content = string.Format(str, args);
+            RefreshTips(content);
+            content = DateTime.Now.ToString("[hh:mm:ss]") + content + "\r\n";
+            File.AppendAllText(logFilePath, content);
+            Debug.Log(content);
         }
-        return path;
+
+        /// <summary>
+        /// 捕获屏幕
+        /// </summary>
+        string CaptureScreen()
+        {
+            string path = imgDirPath + "/" + DateTime.Now.ToString("hhmmss") + ".png";
+            try
+            {
+                Log("保存截图至{0}", path);
+                ScreenCapturnFramework.ScreenCapture.PrintScreen(path);
+            }
+            catch (Exception e)
+            {
+                Log("截图失败:{0}", e.ToString());
+                throw;
+            }
+            return path;
+        }
     }
 }

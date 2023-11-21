@@ -14,6 +14,7 @@ public partial class ActionScreenCaptureIdentifyView : BaseView
     {
         base.Init(_params);
         save_Button.SetButton(OnClickSave);
+        actionType_Dropdown.onValueChanged.AddListener((int _actionType) => { RefreshTargetAction(); });
     }
 
     public override void OnOpen(params object[] _params)
@@ -40,6 +41,33 @@ public partial class ActionScreenCaptureIdentifyView : BaseView
             OptionDatas.Add(new Dropdown.OptionData(action.name));
         }
         targetAction_Dropdown.AddOptions(OptionDatas);
+        //¸³Öµ
+        try
+        {
+            ActionIdentifyData data = JsonConvert.DeserializeObject<ActionIdentifyData>(viewParmas.actionData.val);
+            conditionType_Dropdown.value = (int)data.expressCondition;
+            textVal_InputField.text = data.text;
+            actionType_Dropdown.value = (int)data.expressType;
+            for (int i = 0; i < actionDataList.Count; i++)
+            {
+                if (data.targetActionUUID == actionDataList[targetAction_Dropdown.value].uuid)
+                {
+                    targetAction_Dropdown.value = i;
+                    break;
+                }
+            }
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+        RefreshTargetAction();
+    }
+
+    void RefreshTargetAction()
+    {
+        targetAction.SetActive(actionType_Dropdown.value == (int)ExpressType.MoveTargetAction);
     }
 
     void OnClickSave()
