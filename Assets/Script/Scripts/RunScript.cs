@@ -51,6 +51,7 @@ public class RunScript : MonoBehaviour
     IEnumerator ScriptCoroutine()
     {
         loopCount = 0;
+        actionIndex = 0;
         bool forceExit = false;
         bool isExpressionRight = false;
         Log("脚本开始运行");
@@ -83,7 +84,16 @@ public class RunScript : MonoBehaviour
                                 //ActionMouseClick.SetCursorPos((int)data.mousePosX, (int)data.mousePosY);
                                 int dx = (int)(data.mousePosX / Screen.width * 65535);
                                 int dy = (int)((Screen.height - data.mousePosY) / Screen.height * 65536);
-                                mouse_event(MouseEventFlag.Move | MouseEventFlag.LeftDown | MouseEventFlag.LeftUp | MouseEventFlag.Absolute, dx, dy, 0, new UIntPtr(0));
+                                yield return new WaitForSeconds(0.1f);
+                                //mouse_event(MouseEventFlag.Move | MouseEventFlag.Absolute, dx, dy, 0, new UIntPtr(0));
+                                //yield return new WaitForSeconds(0.3f);
+                                //mouse_event(MouseEventFlag.Move | MouseEventFlag.XDown, 2, 0, 0, new UIntPtr(0));
+                                //yield return new WaitForSeconds(0.3f);
+                                //mouse_event(MouseEventFlag.Move | MouseEventFlag.XDown, 0, 2, 0, new UIntPtr(0));
+                                //yield return new WaitForSeconds(0.5f);
+                                mouse_event(MouseEventFlag.LeftDown | MouseEventFlag.Absolute, dx, dy, 0, new UIntPtr(0));
+                                yield return new WaitForSeconds(0.1f);
+                                mouse_event(MouseEventFlag.LeftUp | MouseEventFlag.Absolute, dx, dy, 0, new UIntPtr(0));
                                 break;
                             }
                         case ActionType.ScreenCapture:

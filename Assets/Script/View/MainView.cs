@@ -32,6 +32,7 @@ public partial class MainView : BaseView
         loopInterval_InputField.onValueChanged.AddListener(OnLoopIntervalChange);
         //UI
         InitScriptList();
+        version_Text.text = "1.1";
     }
 
     public override void OnOpen(params object[] _params)

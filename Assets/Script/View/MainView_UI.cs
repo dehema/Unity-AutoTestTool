@@ -65,6 +65,10 @@ public partial class MainView : BaseView
     public GameObject del;
     [HideInInspector]
     public Button del_Button;
+    [HideInInspector]
+    public GameObject version;
+    [HideInInspector]
+    public Text version_Text;
 
     internal override void _LoadUI()    
     {
@@ -99,5 +103,7 @@ public partial class MainView : BaseView
         save_Button = save.GetComponent<Button>();
         del = transform.Find("$content#Rect/$frame/right/$propertyList/btList2/$del#Button").gameObject;
         del_Button = del.GetComponent<Button>();
+        version = transform.Find("$content#Rect/$frame/right/$version#Text").gameObject;
+        version_Text = version.GetComponent<Text>();
     }
 }
