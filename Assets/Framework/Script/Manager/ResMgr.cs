@@ -6,6 +6,7 @@ using System.Drawing;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using Image = UnityEngine.UI.Image;
 
 public class ResMgr : MonoSingleton<ResMgr>
 {

@@ -91,6 +91,7 @@ public class RunScript : MonoBehaviour
                                 //yield return new WaitForSeconds(0.3f);
                                 //mouse_event(MouseEventFlag.Move | MouseEventFlag.XDown, 0, 2, 0, new UIntPtr(0));
                                 //yield return new WaitForSeconds(0.5f);
+                                mouse_event(MouseEventFlag.Move | MouseEventFlag.Absolute, dx, dy, 0, new UIntPtr(0));
                                 mouse_event(MouseEventFlag.LeftDown | MouseEventFlag.Absolute, dx, dy, 0, new UIntPtr(0));
                                 yield return new WaitForSeconds(0.1f);
                                 mouse_event(MouseEventFlag.LeftUp | MouseEventFlag.Absolute, dx, dy, 0, new UIntPtr(0));
