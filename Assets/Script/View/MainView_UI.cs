@@ -34,6 +34,8 @@ public partial class MainView : BaseView
     [HideInInspector]
     public GameObject emptyCurrActionDataTips;
     [HideInInspector]
+    public Text emptyCurrActionDataTips_Text;
+    [HideInInspector]
     public GameObject propertyList;
     [HideInInspector]
     public GameObject name;
@@ -86,7 +88,8 @@ public partial class MainView : BaseView
         delAllScript_Button = delAllScript.GetComponent<Button>();
         close = transform.Find("$content#Rect/$frame/right/$close#Button").gameObject;
         close_Button = close.GetComponent<Button>();
-        emptyCurrActionDataTips = transform.Find("$content#Rect/$frame/right/$emptyCurrActionDataTips").gameObject;
+        emptyCurrActionDataTips = transform.Find("$content#Rect/$frame/right/$emptyCurrActionDataTips#Text").gameObject;
+        emptyCurrActionDataTips_Text = emptyCurrActionDataTips.GetComponent<Text>();
         propertyList = transform.Find("$content#Rect/$frame/right/$propertyList").gameObject;
         name = transform.Find("$content#Rect/$frame/right/$propertyList/name/$name#InputField").gameObject;
         name_InputField = name.GetComponent<InputField>();

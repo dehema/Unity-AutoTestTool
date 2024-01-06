@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.Networking.UnityWebRequest;
 
 public partial class ActionView : BaseView
 {
@@ -76,12 +77,15 @@ public partial class ActionView : BaseView
         if (showActionValInput)
         {
             int res = 0;
-            string val = res.ToString();
-            actionValInput_InputField.text = val;
-            if (!int.TryParse(currActionData.val, out res))
+            try
             {
-                currActionData.val = val;
+                res = int.Parse(currActionData.val);
             }
+            catch (Exception)
+            {
+                throw;
+            }
+            actionValInput_InputField.text = res.ToString();
         }
         else
         {

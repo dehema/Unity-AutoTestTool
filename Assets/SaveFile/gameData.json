@@ -1,0 +1,32 @@
+{
+    "windowPosX": -0.06974769,
+    "windowPosY": 0.0,
+    "scirptList": [
+        {
+            "name": "新脚本",
+            "loopCount": 1,
+            "loopInterval": 0,
+            "uuid": "2024010612134601",
+            "actionList": [
+                {
+                    "index": 0,
+                    "uuid": "2024010612134806",
+                    "name": "new action",
+                    "actionType": 1,
+                    "val": "{\"mousePosX\":973.526062,\"mousePosY\":530.6358}",
+                    "isLoop": false,
+                    "interval": 0
+                }
+            ],
+            "mainAction": {
+                "index": 0,
+                "uuid": null,
+                "name": null,
+                "actionType": 0,
+                "val": null,
+                "isLoop": false,
+                "interval": 0
+            }
+        }
+    ]
+}

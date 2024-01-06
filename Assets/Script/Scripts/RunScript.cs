@@ -180,7 +180,7 @@ public class RunScript : MonoBehaviour
                     continue;
                 }
                 actionIndex++;
-                if (actionIndex < currScriptData.actionList.Count)
+                if (actionIndex < currScriptData.loopCount)
                 {
                     yield return new WaitForSeconds(currScriptData.loopInterval);
                 }

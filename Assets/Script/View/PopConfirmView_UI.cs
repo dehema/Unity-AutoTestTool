@@ -41,9 +41,9 @@ public partial class PopConfirmView : BaseView
         frame = transform.Find("$content#Rect/$frame").gameObject;
         title = transform.Find("$content#Rect/$frame/$title#Text").gameObject;
         title_Text = title.GetComponent<Text>();
-        yes = transform.Find("$content#Rect/$frame/$yes#Button").gameObject;
+        yes = transform.Find("$content#Rect/$frame/buttonList/$yes#Button").gameObject;
         yes_Button = yes.GetComponent<Button>();
-        no = transform.Find("$content#Rect/$frame/$no#Button").gameObject;
+        no = transform.Find("$content#Rect/$frame/buttonList/$no#Button").gameObject;
         no_Button = no.GetComponent<Button>();
     }
 }

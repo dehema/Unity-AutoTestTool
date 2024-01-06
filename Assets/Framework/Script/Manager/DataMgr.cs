@@ -3,11 +3,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using TMPro;
-using UnityEditor;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Playables;
-using UnityEngine.UIElements;
 
 public class DataMgr : Singleton<DataMgr>
 {
@@ -31,7 +29,7 @@ public class DataMgr : Singleton<DataMgr>
         }
         //玩家数据
         playerData = new PlayerData();
-        string playerDataStr = PlayerPrefs.GetString(SaveField.playerData);
+        string playerDataStr = GetData(SaveField.playerData);
         if (string.IsNullOrEmpty(playerDataStr))
         {
             playerData.playerName.Value = "dehema";
@@ -45,7 +43,7 @@ public class DataMgr : Singleton<DataMgr>
         }
         InitGameData();
         //设置
-        settingData = JsonConvert.DeserializeObject<SettingData>(PlayerPrefs.GetString(SaveField.settingData));
+        settingData = JsonConvert.DeserializeObject<SettingData>(GetData(SaveField.settingData));
         if (settingData == null)
         {
             settingData = new SettingData();
@@ -65,13 +63,13 @@ public class DataMgr : Singleton<DataMgr>
         //login
         Login();
     }
-
+    public string isgameData = "1234";
     /// <summary>
     /// 初始化游戏数据
     /// </summary>
     void InitGameData()
     {
-        gameData = JsonConvert.DeserializeObject<GameData>(PlayerPrefs.GetString(SaveField.gameData));
+        gameData = JsonConvert.DeserializeObject<GameData>(GetData(SaveField.gameData));
         if (gameData == null)
         {
             gameData = new GameData();
@@ -88,7 +86,7 @@ public class DataMgr : Singleton<DataMgr>
     public void SaveGameData()
     {
         string data = JsonConvert.SerializeObject(gameData);
-        PlayerPrefs.SetString(SaveField.gameData, data);
+        SaveDataToJson(SaveField.gameData, data);
     }
 
     /// <summary>
@@ -97,7 +95,7 @@ public class DataMgr : Singleton<DataMgr>
     public void SavePlayerData()
     {
         string str = playerData.ToJson();
-        PlayerPrefs.SetString(SaveField.playerData, str);
+        SaveDataToJson(SaveField.playerData, str);
     }
 
     /// <summary>
@@ -107,7 +105,28 @@ public class DataMgr : Singleton<DataMgr>
     {
         settingData.musicVolume = AudioMgr.Ins.musicVolume;
         settingData.soundVolume = AudioMgr.Ins.soundVolume;
-        PlayerPrefs.SetString(SaveField.settingData, JsonConvert.SerializeObject(settingData));
+        SaveDataToJson(SaveField.settingData, JsonConvert.SerializeObject(settingData));
+    }
+
+    public void SaveDataToJson(string name, string data)
+    {
+        Utility.Log(string.Format("保存{0}至{1}", name, GetSaveFilePath(name)));
+        PlayerPrefs.SetString(name, data);
+        //File.WriteAllText(GetSaveFilePath(name), data);
+    }
+
+    public string GetData(string name)
+    {
+        string path = GetSaveFilePath(name);
+        //if (File.Exists(path))
+        {
+            if (name == SaveField.gameData)
+                //isgameData = File.ReadAllText(path).Length.ToString();
+                isgameData = PlayerPrefs.GetString(name);
+            return PlayerPrefs.GetString(name);
+            //return File.ReadAllText(path);
+        }
+        return string.Empty;
     }
 
     /// <summary>
@@ -115,7 +134,6 @@ public class DataMgr : Singleton<DataMgr>
     /// </summary>
     public void Login()
     {
-        SaveGameData();
     }
 
     /// <summary>
@@ -134,6 +152,17 @@ public class DataMgr : Singleton<DataMgr>
         DataMgr.Ins.SaveGameData();
         DataMgr.Ins.SavePlayerData();
         DataMgr.Ins.SaveSettingData();
+    }
+
+    public string GetSaveFilePath(string _name)
+    {
+        string pathDir = string.Format("{0}/SaveFile/{1}", Application.dataPath, _name);
+        if (!Directory.Exists(pathDir))
+        {
+            Debug.Log("创建文件夹" + pathDir);
+            Directory.CreateDirectory(pathDir);
+        }
+        return pathDir + ".json";
     }
 }
 

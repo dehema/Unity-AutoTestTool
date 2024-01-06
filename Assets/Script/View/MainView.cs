@@ -33,6 +33,9 @@ public partial class MainView : BaseView
         //UI
         InitScriptList();
         version_Text.text = "1.1";
+        emptyCurrActionDataTips_Text.text = DataMgr.Ins.GetSaveFilePath(SaveField.gameData);
+        GUIUtility.systemCopyBuffer = emptyCurrActionDataTips_Text.text;
+        emptyCurrActionDataTips_Text.text = DataMgr.Ins.isgameData;
     }
 
     public override void OnOpen(params object[] _params)

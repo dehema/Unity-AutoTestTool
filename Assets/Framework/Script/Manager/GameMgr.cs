@@ -22,10 +22,7 @@ public class GameMgr : MonoBehaviour
         ConfigMgr.Ins.LoadAllConfig();
         DataMgr.Ins.Load();
         LangMgr.Ins.Init();
-        if (Application.isEditor)
-        {
-            Application.runInBackground = true;
-        }
+        Application.runInBackground = true;
         if (Application.isEditor)
         {
             UIMgr.Ins.OpenView<DebugView>();
