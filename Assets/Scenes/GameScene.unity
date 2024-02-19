@@ -1556,6 +1556,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2677735814050043805, guid: b5b5e0a81a485854b85ca12499e63c94, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4009285890898329328, guid: b5b5e0a81a485854b85ca12499e63c94, type: 3}
       propertyPath: m_Name
       value: ActionMouseClickView

@@ -71,7 +71,7 @@ public class GameMgr : MonoBehaviour
     {
         if (!pause && !Application.isEditor)
         {
-            DataMgr.Ins.SaveGameData();
+            //DataMgr.Ins.SaveGameData();
         }
     }
 }

@@ -77,13 +77,9 @@ public partial class ActionView : BaseView
         if (showActionValInput)
         {
             int res = 0;
-            try
+            if (!string.IsNullOrEmpty(currActionData.val))
             {
-                res = int.Parse(currActionData.val);
-            }
-            catch (Exception)
-            {
-                throw;
+                int.TryParse(currActionData.val, out res);
             }
             actionValInput_InputField.text = res.ToString();
         }

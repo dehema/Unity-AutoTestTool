@@ -16,10 +16,6 @@ public class DataMgr : Singleton<DataMgr>
     bool isLoaded = false;
     public GameData gameData;
     public SettingData settingData;
-    /// <summary>
-    /// 玩家派系
-    /// </summary>
-    public const int playerFactionID = 11;
 
     public void Load()
     {
@@ -63,12 +59,13 @@ public class DataMgr : Singleton<DataMgr>
         //login
         Login();
     }
-    public string isgameData = "1234";
+
     /// <summary>
     /// 初始化游戏数据
     /// </summary>
     void InitGameData()
     {
+        Debug.Log(GetData(SaveField.gameData));
         gameData = JsonConvert.DeserializeObject<GameData>(GetData(SaveField.gameData));
         if (gameData == null)
         {
@@ -111,22 +108,20 @@ public class DataMgr : Singleton<DataMgr>
     public void SaveDataToJson(string name, string data)
     {
         Utility.Log(string.Format("保存{0}至{1}", name, GetSaveFilePath(name)));
-        PlayerPrefs.SetString(name, data);
-        //File.WriteAllText(GetSaveFilePath(name), data);
+        //PlayerPrefs.SetString(name, data);
+        File.WriteAllText(GetSaveFilePath(name), data);
     }
 
     public string GetData(string name)
     {
         string path = GetSaveFilePath(name);
-        //if (File.Exists(path))
+        Debug.Log("读取配置文件" + path);
+        if (File.Exists(path))
         {
             if (name == SaveField.gameData)
-                //isgameData = File.ReadAllText(path).Length.ToString();
-                isgameData = PlayerPrefs.GetString(name);
-            return PlayerPrefs.GetString(name);
-            //return File.ReadAllText(path);
+                return File.ReadAllText(path).ToString();
         }
-        return string.Empty;
+        return PlayerPrefs.GetString(name);
     }
 
     /// <summary>

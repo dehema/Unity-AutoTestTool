@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public partial class ActionMouseClickView : BaseView
 {
@@ -12,6 +13,8 @@ public partial class ActionMouseClickView : BaseView
     {
         base.Init(_params);
         clickScreen_Button.SetButton(OnClickScreen);
+        CanvasScaler canvasScaler = GetComponent<CanvasScaler>();
+        canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
     }
 
     public override void OnOpen(params object[] _params)
@@ -27,6 +30,7 @@ public partial class ActionMouseClickView : BaseView
 
     private void Update()
     {
+        Debug.Log(Input.mousePosition.x + "+" + Input.mousePosition.y);
         img1_Rect.anchoredPosition = new Vector3(img1_Rect.anchoredPosition.x, Input.mousePosition.y - Screen.height / 2, 0);
         img2_Rect.anchoredPosition = new Vector3(Input.mousePosition.x - Screen.width / 2, img2_Rect.anchoredPosition.y, 0);
     }
