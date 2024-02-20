@@ -180,17 +180,20 @@ public class RunScript : MonoBehaviour
                     continue;
                 }
                 actionIndex++;
-                if (actionIndex < currScriptData.loopCount)
-                {
-                    yield return new WaitForSeconds(currScriptData.loopInterval);
-                }
             }
             //完成一次循环
             loopCount++;
+            if (loopCount < currScriptData.loopCount)
+            {
+                yield return new WaitForSeconds(currScriptData.loopInterval);
+            }
             Log("结束第{0}次运行", loopCount + 1);
-            Log("脚本运行结束");
-            Log("");
-            OnComplete();
+            if (loopCount >= currScriptData.loopCount)
+            {
+                Log("脚本运行结束");
+                Log("");
+                OnComplete();
+            }
 #if UNITY_EDITOR
             AssetDatabase.Refresh();
 #endif
